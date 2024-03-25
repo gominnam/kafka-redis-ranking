@@ -13,13 +13,13 @@ public class UserTest {
         User user = User.builder()
                 .userId("minjun")
                 .userName("민준")
-                .score(2024)
+                .totalScore(2024)
                 .build();
 
         // when & then
         assertNotNull(user);
         assertEquals("minjun", user.getUserId());
         assertEquals("민준", user.getUserName());
-        assertEquals(2024, user.getScore());
+        assertEquals(2024, user.getTotalScore());
     }
 }
