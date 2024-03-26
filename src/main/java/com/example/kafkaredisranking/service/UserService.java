@@ -1,7 +1,9 @@
 package com.example.kafkaredisranking.service;
 
+import com.example.kafkaredisranking.dto.UserDTO;
+
 public interface UserService {
-    void saveUserScore(String userId, String username, int score);
-    int getUserScore(String userId);
-    void updateUserScore(String userId, int score);
+    void saveUser(UserDTO userDTO);
+    int getUserScore(UserDTO userDTO);
+    void addScoreByUserId(UserDTO userDTO);
 }

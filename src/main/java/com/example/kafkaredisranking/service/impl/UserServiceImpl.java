@@ -1,42 +1,55 @@
 package com.example.kafkaredisranking.service.impl;
 
+import com.example.kafkaredisranking.dto.UserDTO;
 import com.example.kafkaredisranking.entity.User;
+import com.example.kafkaredisranking.exception.CustomException;
 import com.example.kafkaredisranking.repository.UserRepository;
 import com.example.kafkaredisranking.service.UserService;
+import com.example.kafkaredisranking.service.kafka.ScoreUpdatedEvent;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.core.KafkaTemplate;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final KafkaTemplate<String, String> kafkaTemplate;
+    private final ApplicationEventPublisher eventPublisher;
     private final UserRepository userRepository;
+    private final ModelMapper modelMapper;
 
     @Autowired
-    public UserServiceImpl(KafkaTemplate<String, String> kafkaTemplate, UserRepository userRepository) {
-        this.kafkaTemplate = kafkaTemplate;
+    public UserServiceImpl(ApplicationEventPublisher eventPublisher, UserRepository userRepository, ModelMapper modelMapper) {
+        this.eventPublisher = eventPublisher;
         this.userRepository = userRepository;
+        this.modelMapper = modelMapper;
     }
 
-    public void saveUserScore(String userId, String userName, int score) {
-        userRepository.save(User.builder()
-                .userId(userId)
-                .userName(userName)
-                .totalScore(score)
-                .build());
+    public void saveUser(UserDTO userDTO) {
+        User user = modelMapper.map(userDTO, User.class);
+        userRepository.save(user);
 
-        kafkaTemplate.send("gameScores", userId + ":" + score);
+        int totalScore = userDTO.getScore();
+        eventPublisher.publishEvent(new ScoreUpdatedEvent(this, user.getUserId(), totalScore));
     }
 
-    public void updateUserScore(String userId, int score) {
-        userRepository.addScoreByUserId(userId, score);
+    @Transactional
+    public void addScoreByUserId(UserDTO userDTO) {
+        String userId = userDTO.getUserId();
+        int score = userDTO.getScore();
 
-        kafkaTemplate.send("gameScores", userId + ":" + score);
+        int updatedRows = userRepository.addScoreByUserId(userId, score);
+        if (updatedRows == 0) {
+            throw new CustomException("Score update failed for user: " + userId);
+        }
+
+        int totalScore = userRepository.getScoreByUserId(userId);
+        eventPublisher.publishEvent(new ScoreUpdatedEvent(this, userId, totalScore));
     }
 
-    public int getUserScore(String userId) {
-        return userRepository.getScoreByUserId(userId);
+    public int getUserScore(UserDTO userDTO) {
+        User user = modelMapper.map(userDTO, User.class);
+        return userRepository.getScoreByUserId(user.getUserId());
     }
-
 }
