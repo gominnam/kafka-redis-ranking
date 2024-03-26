@@ -10,6 +10,7 @@
 - Spring Boot 3.2.4
 - Kafka
 - Redis
+- PostgreSQL
 
 
 ## Reference Links

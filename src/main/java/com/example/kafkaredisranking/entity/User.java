@@ -18,6 +18,6 @@ public class User {
     private String userId;
     @Column(name = "user_name")
     private String userName;
-    @Column(name = "total_score")
+    @Column(name = "total_score", columnDefinition = "integer default 0")
     private int totalScore;
 }
