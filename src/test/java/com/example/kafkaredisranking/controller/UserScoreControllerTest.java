@@ -36,7 +36,7 @@ public class UserScoreControllerTest {
 
     @BeforeEach
     public void setUp() {
-        userDTO = new UserDTO("minjun", "민준", 100, 2024);
+        userDTO = new UserDTO(1L, "minjun", "민준", 100, 2024);
     }
 
     @Test

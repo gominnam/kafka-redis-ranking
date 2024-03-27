@@ -8,13 +8,16 @@ import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
-import java.util.Objects;
 
 @Service
 public class UserStatsService {
 
-    @Autowired
     private GamePlayStatsRepository statsRepository;
+
+    @Autowired
+    public UserStatsService(GamePlayStatsRepository statsRepository) {
+        this.statsRepository = statsRepository;
+    }
 
     @KafkaListener(topics = "gameScores", groupId = "statsService")
     public void updateUserStats(String message) {
