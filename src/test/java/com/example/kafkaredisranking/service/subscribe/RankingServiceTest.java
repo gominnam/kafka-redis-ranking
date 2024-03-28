@@ -9,6 +9,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;
 
+import java.lang.reflect.Method;
+
 import static org.mockito.Mockito.*;
 
 @ExtendWith(MockitoExtension.class)

@@ -11,14 +11,22 @@ public class GamePlayStatsTest {
     @Test
     public void createGamePlayStats() {
         // when
-        GamePlayStats gamePlayStats = GamePlayStats.builder()
+         User testUser = User.builder()
                 .id(1L)
                 .userId("minjun")
+                .userName("민준")
+                .totalScore(2024)
+                 .build();
+
+        GamePlayStats gamePlayStats = GamePlayStats.builder()
+                .id(1L)
+                .user(testUser)
                 .playTime(LocalDateTime.now())
                 .build();
 
         // then
         assertEquals(1L, gamePlayStats.getId());
-        assertEquals("minjun", gamePlayStats.getUserId());
+        assertEquals(testUser, gamePlayStats.getUser());
+        assertEquals("minjun", gamePlayStats.getUser().getUserId());
     }
 }

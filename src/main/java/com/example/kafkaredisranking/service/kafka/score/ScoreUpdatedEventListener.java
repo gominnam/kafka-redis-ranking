@@ -1,4 +1,4 @@
-package com.example.kafkaredisranking.service.kafka;
+package com.example.kafkaredisranking.service.kafka.score;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;

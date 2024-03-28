@@ -5,7 +5,7 @@ import com.example.kafkaredisranking.entity.User;
 import com.example.kafkaredisranking.exception.CustomException;
 import com.example.kafkaredisranking.repository.UserRepository;
 import com.example.kafkaredisranking.service.UserService;
-import com.example.kafkaredisranking.service.kafka.ScoreUpdatedEvent;
+import com.example.kafkaredisranking.service.kafka.score.ScoreUpdatedEvent;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;

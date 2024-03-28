@@ -1,5 +1,6 @@
 package com.example.kafkaredisranking.repository;
 
+import com.example.kafkaredisranking.dto.UserPlayCountDTO;
 import com.example.kafkaredisranking.entity.GamePlayStats;
 import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.Test;
@@ -19,7 +20,6 @@ public class GamePlayStatsRepositoryTest {
         // given
         GamePlayStats gamePlayStats = GamePlayStats.builder()
                 .id(1L)
-                .userId("minjun")
                 .playTime(LocalDateTime.now())
                 .build();
 
@@ -29,7 +29,7 @@ public class GamePlayStatsRepositoryTest {
         // then
         Assertions.assertThat(savedGamePlayStats).isNotNull();
         Assertions.assertThat(savedGamePlayStats.getId()).isEqualTo(gamePlayStats.getId());
-        Assertions.assertThat(savedGamePlayStats.getUserId()).isEqualTo(gamePlayStats.getUserId());
+        Assertions.assertThat(savedGamePlayStats.getUser()).isEqualTo(gamePlayStats.getUser());
         Assertions.assertThat(savedGamePlayStats.getPlayTime()).isEqualTo(gamePlayStats.getPlayTime());
     }
 }

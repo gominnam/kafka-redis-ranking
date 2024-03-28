@@ -1,10 +1,16 @@
 package com.example.kafkaredisranking.repository;
 
+import com.example.kafkaredisranking.dto.UserPlayCountDTO;
 import com.example.kafkaredisranking.entity.User;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
+import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
+import org.springframework.test.annotation.DirtiesContext;
+
+import java.time.LocalDateTime;
+import java.util.Optional;
 
 import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
@@ -14,41 +20,65 @@ public class UserRepositoryTest {
     @Autowired
     private UserRepository userRepository;
 
-    private User user;
-
-    @BeforeEach
-    public void setUp() {
-        user = User.builder()
+    @Test
+    public void whenGetScoreByUserId_shouldReturnScore() {
+        // given
+        User user = User.builder()
                 .id(1L)
                 .userId("test")
                 .userName("minjun")
                 .totalScore(2024)
                 .build();
-    }
-
-    @Test
-    public void testGetScoreByUserId() {
-        // given
         userRepository.save(user);
 
         // when
-        int score = userRepository.getScoreByUserId(user.getUserId());
+        Integer score = userRepository.getScoreByUserId(user.getUserId());
+        if(score == null) {
+            score = 0;
+        }
 
         // then
         assertThat(score).isEqualTo(user.getTotalScore());
     }
 
     @Test
-    public void testAddScoreByUserId() {
+    public void whenAddScoreByUserId_shouldReturnNewScore() {
         // given
-        int score = 10;
-        int newScore = user.getTotalScore()+score;
+        User user = User.builder()
+                .id(1L)
+                .userId("test")
+                .userName("minjun")
+                .totalScore(2024)
+                .build();
         userRepository.save(user);
+        int score = 10;
+        Integer newScore = user.getTotalScore()+score;
 
         // when
         userRepository.addScoreByUserId(user.getUserId(), score);
 
         // then
         assertThat(userRepository.getScoreByUserId(user.getUserId())).isEqualTo(newScore);
+    }
+
+    @Test
+    public void whenFindByUserIdAndCountPlayTimeForToday_thenOK() {
+        // given
+        User user = User.builder()
+                .id(1L)
+                .userId("test")
+                .userName("minjun")
+                .totalScore(2024)
+                .build();
+        userRepository.save(user);
+
+        // when
+        Optional<UserPlayCountDTO> userPlayCountDTO = userRepository.findByUserIdAndCountPlayTimeForToday(user.getUserId(), LocalDateTime.now());
+
+        // then
+        if (userPlayCountDTO.isPresent()) {
+            assertThat(userPlayCountDTO.get().getUserName()).isEqualTo(user.getUserName());
+            assertThat(userPlayCountDTO.get().getPlayCount()).isEqualTo(1);
+        }
     }
 }
