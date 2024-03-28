@@ -40,7 +40,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void when_saveUser_then_publishEvent() {
+    void whenSaveUser_then_publishEvent() {
         // given
         User user = User.builder()
                         .userName(userDTO.getUserName())
@@ -59,7 +59,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void when_addScoreByUserId_then_publishEvent() {
+    void whenAddScoreByUserId_then_publishEvent() {
         // given
         String userId = userDTO.getUserId();
         int score = userDTO.getScore();
@@ -76,7 +76,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void  when_getUserScore_then_returnTotalScore(){
+    void  whenGetUserScore_then_returnTotalScore(){
         // given
         User user = User.builder()
                         .userId(userDTO.getUserId())
