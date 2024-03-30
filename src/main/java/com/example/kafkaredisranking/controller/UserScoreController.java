@@ -1,7 +1,6 @@
 package com.example.kafkaredisranking.controller;
 
 import com.example.kafkaredisranking.dto.UserDTO;
-import com.example.kafkaredisranking.entity.User;
 import com.example.kafkaredisranking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
