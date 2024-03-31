@@ -1,11 +1,11 @@
-package com.example.kafkaredisranking.service.subscribe;
+package com.example.kafkaredisranking.service.kafka.subscribe;
 
 import com.example.kafkaredisranking.entity.GamePlayStats;
 import com.example.kafkaredisranking.entity.User;
 import com.example.kafkaredisranking.repository.GamePlayStatsRepository;
 import com.example.kafkaredisranking.repository.UserRepository;
-import com.example.kafkaredisranking.service.kafka.playtime.GamePlayTimeExceededEvent;
-import com.example.kafkaredisranking.service.subscribe.util.KafkaMessageParser;
+import com.example.kafkaredisranking.service.kafka.publish.playtime.GamePlayTimeExceededEvent;
+import com.example.kafkaredisranking.service.kafka.subscribe.util.KafkaMessageParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.kafka.annotation.KafkaListener;

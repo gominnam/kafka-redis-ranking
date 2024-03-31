@@ -1,4 +1,4 @@
-package com.example.kafkaredisranking.service.kafka.score;
+package com.example.kafkaredisranking.service.kafka.publish.score;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;
@@ -21,6 +21,7 @@ public class ScoreUpdatedEventListener {
     }
 
     private String formatMessage(ScoreUpdatedEvent event) {
+        System.out.println("event.getUserId() + \":\" + event.getTotalScore() = " + event.getUserId() + ":" + event.getTotalScore());
         return event.getUserId() + ":" + event.getTotalScore();
     }
 }

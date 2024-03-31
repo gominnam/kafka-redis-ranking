@@ -1,4 +1,4 @@
-package com.example.kafkaredisranking.service.kafka.playtime;
+package com.example.kafkaredisranking.service.kafka.publish.playtime;
 
 import org.springframework.context.event.EventListener;
 import org.springframework.kafka.core.KafkaTemplate;

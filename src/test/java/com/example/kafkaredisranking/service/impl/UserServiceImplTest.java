@@ -3,7 +3,7 @@ package com.example.kafkaredisranking.service.impl;
 import com.example.kafkaredisranking.dto.UserDTO;
 import com.example.kafkaredisranking.entity.User;
 import com.example.kafkaredisranking.repository.UserRepository;
-import com.example.kafkaredisranking.service.kafka.score.ScoreUpdatedEvent;
+import com.example.kafkaredisranking.service.kafka.publish.score.ScoreUpdatedEvent;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

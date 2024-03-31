@@ -1,6 +1,6 @@
-package com.example.kafkaredisranking.service.subscribe;
+package com.example.kafkaredisranking.service.kafka.subscribe;
 
-import com.example.kafkaredisranking.service.subscribe.util.KafkaMessageParser;
+import com.example.kafkaredisranking.service.kafka.subscribe.util.KafkaMessageParser;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Service;
 

@@ -1,4 +1,4 @@
-package com.example.kafkaredisranking.service.kafka.score;
+package com.example.kafkaredisranking.service.kafka.publish.score;
 
 import lombok.Getter;
 import lombok.Setter;

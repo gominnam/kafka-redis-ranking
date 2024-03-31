@@ -1,4 +1,4 @@
-package com.example.kafkaredisranking.service.kafka.playtime;
+package com.example.kafkaredisranking.service.kafka.publish.playtime;
 
 import lombok.Getter;
 import lombok.Setter;

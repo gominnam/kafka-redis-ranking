@@ -1,6 +1,6 @@
-package com.example.kafkaredisranking.service.subscribe;
+package com.example.kafkaredisranking.service.kafka.subscribe;
 
-import com.example.kafkaredisranking.service.subscribe.util.KafkaMessageParser;
+import com.example.kafkaredisranking.service.kafka.subscribe.util.KafkaMessageParser;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ZSetOperations;

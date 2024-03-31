@@ -1,10 +1,11 @@
-package com.example.kafkaredisranking.service.subscribe;
+package com.example.kafkaredisranking.service.kafka.subscribe;
 
 import com.example.kafkaredisranking.dto.UserPlayCountDTO;
 import com.example.kafkaredisranking.entity.GamePlayStats;
 import com.example.kafkaredisranking.entity.User;
 import com.example.kafkaredisranking.repository.GamePlayStatsRepository;
 import com.example.kafkaredisranking.repository.UserRepository;
+import com.example.kafkaredisranking.service.kafka.subscribe.UserStatsService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
