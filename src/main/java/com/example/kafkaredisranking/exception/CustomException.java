@@ -1,20 +1,26 @@
 package com.example.kafkaredisranking.exception;
 
+import lombok.Getter;
+
 public class CustomException extends RuntimeException {
 
-    private final int statusCode;
+    @Getter
+    private final ErrorCode errorCode;
+    private final String detailMessage;
 
-    public CustomException(String message) {
-        super(message);
-        this.statusCode = 400; // 기본적으로 400(Bad Request) 코드
+    public CustomException(ErrorCode errorCode) {
+        super(errorCode.getMessage());
+        this.errorCode = errorCode;
+        this.detailMessage = null;
     }
 
-    public CustomException(String message, int statusCode) {
-        super(message);
-        this.statusCode = statusCode;
+    public CustomException(ErrorCode errorCode, String detailMessage) {
+        super(detailMessage);
+        this.errorCode = errorCode;
+        this.detailMessage = detailMessage;
     }
 
-    public int getStatusCode() {
-        return statusCode;
+    public String getDetailMessage() {
+        return detailMessage != null ? detailMessage : errorCode.getMessage();
     }
 }
