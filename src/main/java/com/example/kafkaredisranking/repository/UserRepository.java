@@ -19,7 +19,6 @@ public interface UserRepository extends JpaRepository<User, Long>{
     Integer addScoreByUserId(String userId, int score);
 
     @Query("select u.userId, u.userName, count(g) as playCount from User u join u.gamePlayStats g where u.userId = ?1 and CAST(g.playTime AS DATE) = CAST(?2 AS DATE) group by u.userId") // H2 Database Date casting issue
-//    @Query("select u.userId, u.userName, count(g) as playCount from User u join u.gamePlayStats g where u.userId = ?1 and DATE(g.playTime) = DATE(?2) group by u.userId")
     Optional<UserPlayCountDTO> findByUserIdAndCountPlayTimeForToday(String userId, LocalDateTime playTime);
 
     Optional<User> findByUserId(String userId);

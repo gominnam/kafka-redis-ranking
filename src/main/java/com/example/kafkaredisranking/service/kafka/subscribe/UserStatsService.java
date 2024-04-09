@@ -33,7 +33,6 @@ public class UserStatsService {
     @KafkaListener(topics = "gameScores", groupId = "user-stat-group-id")
     @Transactional
     public void updateUserStats(String message) {
-        System.out.println("UserStats received message: " + message);
         String[] parsedMessage = KafkaMessageParser.parseFromMessage(message);
         GamePlayStats stats = saveStats(parsedMessage);
         checkAndPublishEvent(stats);
