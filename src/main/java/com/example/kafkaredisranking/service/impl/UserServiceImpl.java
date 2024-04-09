@@ -3,6 +3,7 @@ package com.example.kafkaredisranking.service.impl;
 import com.example.kafkaredisranking.dto.UserDTO;
 import com.example.kafkaredisranking.entity.User;
 import com.example.kafkaredisranking.exception.CustomException;
+import com.example.kafkaredisranking.exception.ErrorCode;
 import com.example.kafkaredisranking.repository.UserRepository;
 import com.example.kafkaredisranking.service.UserService;
 import com.example.kafkaredisranking.service.kafka.publish.score.ScoreUpdatedEvent;
@@ -41,7 +42,7 @@ public class UserServiceImpl implements UserService {
 
         int updatedRows = userRepository.addScoreByUserId(userId, score);
         if (updatedRows == 0) {
-            throw new CustomException("Score update failed for user: " + userId);
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "Failed to update score");
         }
 
         int totalScore = userRepository.getScoreByUserId(userId);

@@ -1,5 +1,6 @@
 package com.example.kafkaredisranking.exception.handler;
 
+import com.example.kafkaredisranking.exception.ErrorCode;
 import com.example.kafkaredisranking.exception.ExceptionControllerTest;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,9 +23,9 @@ public class GlobalExceptionHandlerTest {
     void whenTriggerCustomException_thenRespondWithBadRequest() throws Exception {
         mockMvc.perform(get("/trigger-custom-exception"))
                 .andExpect(status().isBadRequest())
-                .andExpect(jsonPath("$.status").value(HttpStatus.BAD_REQUEST.value()))
+                .andExpect(jsonPath("$.status").value(ErrorCode.BAD_REQUEST.getCode()))
                 .andExpect(jsonPath("$.error").value("Custom Error"))
-                .andExpect(jsonPath("$.message").value("Custom error message"))
+                .andExpect(jsonPath("$.message").value("잘못된 요청입니다."))
                 .andExpect(jsonPath("$.path").value(containsString("/trigger-custom-exception")))
                 .andExpect(jsonPath("$.timestamp").exists());
     }

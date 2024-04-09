@@ -1,5 +1,8 @@
 package com.example.kafkaredisranking.exception;
 
+import lombok.Getter;
+
+@Getter
 public enum ErrorCode {
     BAD_REQUEST(400, "잘못된 요청입니다."),
     INVALID_INPUT(1001, "입력 값이 유효하지 않습니다."),
@@ -14,13 +17,5 @@ public enum ErrorCode {
     ErrorCode(int code, String message) {
         this.code = code;
         this.message = message;
-    }
-
-    public int getCode() {
-        return code;
-    }
-
-    public String getMessage() {
-        return message;
     }
 }
