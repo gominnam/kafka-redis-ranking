@@ -21,10 +21,10 @@ public class GlobalExceptionHandler {
     public ResponseEntity<Object> handleCustomException(CustomException ex, WebRequest request) {
         Map<String, Object> body = new LinkedHashMap<>();
         body.put("timestamp", LocalDateTime.now());
-        body.put("status", ex.getErrorCode()); // 사용자 정의 예외에서 상태 코드 가져오기
+        body.put("status", ex.getErrorCode().getCode());
         body.put("error", "Custom Error");
-        body.put("message", ex.getMessage()); // 예외에서 설정한 메시지
-        body.put("path", request.getDescription(false)); // 요청 URL
+        body.put("message", ex.getMessage());
+        body.put("path", request.getDescription(false));
 
         return new ResponseEntity<>(body, HttpStatus.valueOf(ex.getErrorCode().getCode()));
     }

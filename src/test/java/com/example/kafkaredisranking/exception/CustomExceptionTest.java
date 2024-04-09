@@ -7,15 +7,15 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 public class CustomExceptionTest {
     @Test
     void customException_defaultStatusCode() {
-        CustomException ex = new CustomException(ErrorCode.BAD_REQUEST);
-        assertEquals(400, ex.getErrorCode().getCode());
-        assertEquals("잘못된 요청입니다.", ex.getMessage());
+        CustomException ex = new CustomException("Default error message");
+        assertEquals(400, ex.getStatusCode());
+        assertEquals("Default error message", ex.getMessage());
     }
 
     @Test
     void customException_customStatusCode() {
-        CustomException ex = new CustomException(ErrorCode.INTERNAL_SERVER_ERROR);
-        assertEquals(1003, ex.getErrorCode().getCode());
-        assertEquals("서버 내부 오류가 발생했습니다.", ex.getMessage());
+        CustomException ex = new CustomException("Custom error message", 404);
+        assertEquals(404, ex.getStatusCode());
+        assertEquals("Custom error message", ex.getMessage());
     }
 }

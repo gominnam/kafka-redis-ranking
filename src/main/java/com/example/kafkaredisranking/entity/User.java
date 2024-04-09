@@ -3,7 +3,9 @@ package com.example.kafkaredisranking.entity;
 import jakarta.persistence.*;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Entity
 @Getter
@@ -24,4 +26,15 @@ public class User {
     private int totalScore;
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY, orphanRemoval = true)
     private List<GamePlayStats> gamePlayStats;
+
+    public List<GamePlayStats> getTodayGamePlayStats() {
+        LocalDate today = LocalDate.now();
+        return gamePlayStats.stream()
+                .filter(stats -> stats.getPlayTime().toLocalDate().equals(today))
+                .collect(Collectors.toList());
+    }
+
+    public long countTodayGamePlays() {
+        return getTodayGamePlayStats().size();
+    }
 }

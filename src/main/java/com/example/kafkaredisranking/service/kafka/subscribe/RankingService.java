@@ -19,8 +19,9 @@ public class RankingService {
         this.redisTemplate = redisTemplate;
     }
 
-    @KafkaListener(topics = "gameScores", groupId = "rankingService")
+    @KafkaListener(topics = "gameScores", groupId = "ranking-group-id")
     public void updateRanking(String message) {
+        System.out.println("Ranking received message: " + message);
         String[] parseMessage = KafkaMessageParser.parseFromMessage(message);
         String userId = Objects.requireNonNull(parseMessage)[0];
         int score = Integer.parseInt(parseMessage[1]);

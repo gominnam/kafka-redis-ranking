@@ -8,19 +8,10 @@ import org.springframework.stereotype.Service;
 @Service
 public class NotificationService {
 
-    private static final int PLAY_COUNT_THRESHOLD = 8;
-
-    @KafkaListener(topics = "playTimes", groupId = "notificationService")
+    @KafkaListener(topics = "playTimes", groupId = "notification-group-id")
     public void sendNotification(String message) {
         String[] parsedMessage = KafkaMessageParser.parseFromMessage(message);
-        if (shouldNotify(parsedMessage)) {
-            sendPlayTimeNotification(parsedMessage);
-        }
-    }
-
-    private boolean shouldNotify(String[] parsedMessage) {
-        int playCount = Integer.parseInt(parsedMessage[1]);
-        return playCount > 0 && playCount % PLAY_COUNT_THRESHOLD == 0;
+        sendPlayTimeNotification(parsedMessage);
     }
 
     private void sendPlayTimeNotification(String[] parsedMessage) {

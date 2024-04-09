@@ -10,7 +10,7 @@ import java.time.Clock;
 @Setter
 public class GamePlayTimeExceededEvent extends ApplicationEvent {
     private String userName;
-    private long playCount;
+    private int playCount;
 
     public GamePlayTimeExceededEvent(Object source) {
         super(source);
@@ -20,7 +20,7 @@ public class GamePlayTimeExceededEvent extends ApplicationEvent {
         super(source, clock);
     }
 
-    public GamePlayTimeExceededEvent(Object source, String userName, long playCount) {
+    public GamePlayTimeExceededEvent(Object source, String userName, int playCount) {
         super(source);
         this.userName = userName;
         this.playCount = playCount;
