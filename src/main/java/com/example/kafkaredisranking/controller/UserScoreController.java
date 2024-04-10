@@ -4,9 +4,9 @@ import com.example.kafkaredisranking.dto.UserDTO;
 import com.example.kafkaredisranking.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 public class UserScoreController {
@@ -28,5 +28,10 @@ public class UserScoreController {
     public ResponseEntity<Void> addUserScore(@RequestBody UserDTO userDTO) {
         userService.addScoreByUserId(userDTO);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/api/users/ranking")
+    public ResponseEntity<List<UserDTO>> getTopUsers(@RequestParam int top) {
+        return ResponseEntity.ok(userService.getTopUsers(top));
     }
 }

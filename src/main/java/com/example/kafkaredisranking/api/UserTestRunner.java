@@ -5,7 +5,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Flux;
+import reactor.core.publisher.Mono;
+import reactor.core.scheduler.Schedulers;
 
+import java.time.Duration;
 import java.util.List;
 
 @Component
@@ -31,49 +35,38 @@ public class UserTestRunner implements CommandLineRunner {
 
     @Override
     public void run(String... args) {
-        for(int i=0; i<USER_COUNT; i++) {
-            createUser(users.get(i));
-        }
-
-        while(true) {
-            addUserScore();
-            try {
-                Thread.sleep(5000);
-            } catch (InterruptedException e) {
-                Thread.currentThread().interrupt(); // restore interrupted status
-                break;
-            }
-        }
+        Flux.fromIterable(users)
+                .flatMap(this::createUser)
+                .thenMany(Flux.interval(Duration.ofSeconds(5)))
+                .flatMap(i -> addUserScore())
+                .subscribeOn(Schedulers.boundedElastic())
+                .subscribe();
     }
 
-    private void createUser(String name) {
+    private Mono<Void> createUser(String name) {
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(name);
         userDTO.setUserName(name);
 
-        WebClient.create()
-                .post()
+        return webClient.post()
                 .uri("/api/user/register")
                 .bodyValue(userDTO)
                 .retrieve()
-                .bodyToMono(Void.class)
-                .block();
+                .bodyToMono(Void.class);
     }
 
-    private void addUserScore() {
-        int randomUserIndex = (int)(Math.random() * USER_COUNT);
+    private Mono<Void> addUserScore() {
+        int randomUserIndex = (int)(Math.random() * users.size());
         int randomScore = (int)(Math.random() * 10) + 1;
 
         UserDTO userDTO = new UserDTO();
         userDTO.setUserId(users.get(randomUserIndex));
         userDTO.setScore(randomScore);
 
-        WebClient.create()
-                .post()
+        return webClient.post()
                 .uri("/api/user/score")
                 .bodyValue(userDTO)
                 .retrieve()
-                .bodyToMono(Void.class)
-                .block();
+                .bodyToMono(Void.class);
     }
 }
