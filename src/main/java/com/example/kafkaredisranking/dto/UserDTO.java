@@ -1,14 +1,12 @@
 package com.example.kafkaredisranking.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 @Getter
 @Setter
 @Builder
 @AllArgsConstructor
+@NoArgsConstructor
 public class UserDTO {
     private Long id;
     private String userId;
