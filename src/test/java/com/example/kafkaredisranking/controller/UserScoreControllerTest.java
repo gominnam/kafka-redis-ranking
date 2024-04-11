@@ -13,10 +13,14 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 
+import java.util.List;
+
+import static org.hamcrest.Matchers.hasSize;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.times;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(MockitoExtension.class)
@@ -63,5 +67,26 @@ public class UserScoreControllerTest {
                 .andExpect(status().isOk());
 
         verify(userService, times(1)).addScoreByUserId(any(UserDTO.class));
+    }
+
+    @Test
+    public void getTopUsersTest() throws Exception {
+        // given
+        int top = 3;
+        List<UserDTO> userDTOList = List.of(
+                new UserDTO(1L, "aa", "aa", 100, 1000),
+                new UserDTO(2L, "bb", "bb", 200, 2000),
+                new UserDTO(3L, "cc", "cc", 300, 3000)
+        );
+        when(userService.getTopUsers(top)).thenReturn(userDTOList);
+
+        // when & then
+        mockMvc.perform(get("/api/users/ranking")
+                        .param("top", String.valueOf(top))
+                        .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$", hasSize(top)));
+
+        verify(userService, times(1)).getTopUsers(top);
     }
 }

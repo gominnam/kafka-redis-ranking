@@ -12,6 +12,13 @@ import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.modelmapper.ModelMapper;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.data.redis.core.DefaultTypedTuple;
+import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.ZSetOperations;
+
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -25,6 +32,9 @@ public class UserServiceImplTest {
 
     @Mock
     private ApplicationEventPublisher eventPublisher;
+
+    @Mock
+    private RedisTemplate<String, String> redisTemplate;
 
     @Mock
     private ModelMapper modelMapper;
@@ -76,7 +86,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    void  whenGetUserScore_then_returnTotalScore(){
+    void whenGetUserScore_then_returnTotalScore(){
         // given
         User user = User.builder()
                         .userId(userDTO.getUserId())
@@ -93,5 +103,31 @@ public class UserServiceImplTest {
         // then
         assertThat(result).isEqualTo(2024);
         verify(userRepository, times(1)).getScoreByUserId(user.getUserId());
+    }
+
+    @Test
+    void whenGetTopUsers_then_returnTopUsers(){
+        // given
+        int top = 3;
+        ZSetOperations<String, String> zSetOperations = mock(ZSetOperations.class);
+        when(redisTemplate.opsForZSet()).thenReturn(zSetOperations);
+
+        Set<ZSetOperations.TypedTuple<String>> topUsersWithScores = new HashSet<>();
+        for (int i = 0; i < top; i++) {
+            ZSetOperations.TypedTuple<String> userWithScore = new DefaultTypedTuple<>("user" + i, (double) ((top - i) * 100));
+            topUsersWithScores.add(userWithScore);
+        }
+
+        when(zSetOperations.reverseRangeWithScores("userScores", 0, top - 1)).thenReturn(topUsersWithScores);
+
+        // when
+        List<UserDTO> result = userService.getTopUsers(top);
+
+        // then
+        assertThat(result.size()).isEqualTo(top);
+        for (int i = 0; i < top; i++) {
+            assertThat(result.get(i).getUserId()).isEqualTo("user" + (top - i - 1));
+            assertThat(result.get(i).getScore()).isEqualTo((i + 1) * 100);
+        }
     }
 }
