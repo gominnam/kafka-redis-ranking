@@ -1,5 +1,7 @@
 package com.example.kafkaredisranking.service.kafka.subscribe;
 
+import com.example.kafkaredisranking.entity.User;
+import com.example.kafkaredisranking.repository.UserRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -18,7 +20,9 @@ import org.springframework.kafka.test.utils.KafkaTestUtils;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import static org.mockito.Mockito.*;
@@ -36,6 +40,9 @@ public class RankingServiceTest {
     private RedisTemplate<String, String> redisTemplateMock;
 
     @Mock
+    private UserRepository userRepository;
+
+    @Mock
     private ZSetOperations<String, String> zSetOperationsMock;
 
     private KafkaTemplate<String, String> kafkaTemplate;
@@ -49,6 +56,28 @@ public class RankingServiceTest {
 
         Map<String, Object> producerProps = new HashMap<>(KafkaTestUtils.producerProps(embeddedKafkaBroker));
         kafkaTemplate = new KafkaTemplate<>(new DefaultKafkaProducerFactory<>(producerProps));
+    }
+
+    @Test
+    public void whenInit_thenAddToSortedSet() {
+        // given
+        User user1 = new User();
+        user1.setUserId("user1");
+        user1.setTotalScore(100);
+
+        User user2 = new User();
+        user2.setUserId("user2");
+        user2.setTotalScore(200);
+
+        List<User> users = Arrays.asList(user1, user2);
+        when(userRepository.findAll()).thenReturn(users);
+
+        // when
+        rankingService.init();
+
+        // then
+        verify(zSetOperationsMock, times(1)).add("userScores", user1.getUserId(), user1.getTotalScore());
+        verify(zSetOperationsMock, times(1)).add("userScores", user2.getUserId(), user2.getTotalScore());
     }
 
     @Test
