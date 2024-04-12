@@ -23,7 +23,6 @@ import java.util.Map;
 
 import static org.mockito.Mockito.*;
 
-//@ExtendWith(MockitoExtension.class)
 @ExtendWith(SpringExtension.class)
 @EmbeddedKafka(partitions = 1, topics = {"gameScores"})
 @TestPropertySource(properties = {"spring.kafka.producer.bootstrap-servers=${spring.embedded.kafka.brokers}",

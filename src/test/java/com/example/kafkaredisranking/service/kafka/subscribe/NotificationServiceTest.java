@@ -1,6 +1,5 @@
 package com.example.kafkaredisranking.service.kafka.subscribe;
 
-import com.example.kafkaredisranking.service.kafka.subscribe.NotificationService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
